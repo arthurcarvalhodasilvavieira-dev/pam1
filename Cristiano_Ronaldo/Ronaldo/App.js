@@ -14,8 +14,6 @@ export default function App() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-
-
       <View style={styles.caixaTitulo}>
         <Text style={styles.titulo}>
           A História do CR7
