@@ -1,5 +1,5 @@
 # pam1
 
-#arthur carvalho
+#Arthur Carvalho 2DS
 
-nicolas araújo melo
+Nicolas Araújo Melo 2DS
