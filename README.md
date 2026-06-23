@@ -1,3 +1,4 @@
 # pam1
 
-#arthur carvalho e nicolas araújo
+#arthur carvalho
+nicolas araújo melo
