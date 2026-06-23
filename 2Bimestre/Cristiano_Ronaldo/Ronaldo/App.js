@@ -1,3 +1,6 @@
+/* Nicolas Araújo Melo
+   Arthur Carvalho*/
+
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, ScrollView, View, TouchableOpacity, Image } from 'react-native';
 import { useState } from 'react';
