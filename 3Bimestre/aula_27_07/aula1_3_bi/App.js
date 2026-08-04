@@ -1,3 +1,9 @@
+import StackNavigator from './navigation/StackNavigator';
+
+export default function App() {
+  return <StackNavigator />;
+}
+
 import { StatusBar } from 'expo-status-bar';
 import {
   StyleSheet,
