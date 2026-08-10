@@ -23,7 +23,7 @@ export default function Login({ navigation }) {
 
         <Button
           title="Entrar"
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => navigation.navigate('homebeatles')}
         />
 
       </View>
