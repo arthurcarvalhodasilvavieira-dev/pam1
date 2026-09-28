@@ -7,7 +7,8 @@ export function criarExperiencia(
 
   if (
     sentimento.trim() === '' ||
-    palavra.trim() === ''
+    palavra.
+    trim() === ''
   ) {
 
     setExperiencia(
