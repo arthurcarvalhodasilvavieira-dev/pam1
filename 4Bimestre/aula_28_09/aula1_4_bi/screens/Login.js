@@ -1,23 +1,27 @@
+import { useState } from 'react';
+
 import {
     View,
     Text,
     TextInput,
-    TouchableOpacity,
+    Button,
+    Image,
     StyleSheet,
     Alert
 } from 'react-native';
 
 export default function Login({ navigation }) {
 
-    const [usuario, setUsuario] = useState('');
-    const [senha, setSenha] = useState('');
+    const [email, setEmail] = useState('acdc');
+    const [senha, setSenha] = useState('1234');
 
     function entrar() {
 
-        if (usuario === '' || senha === '') {
+        if (email === '' || senha === '') {
+
             Alert.alert(
                 'Atenção',
-                'Preencha o usuário e a senha.'
+                'Digite o e-mail e a senha.'
             );
 
             return;
@@ -27,43 +31,61 @@ export default function Login({ navigation }) {
     }
 
     return (
+
         <View style={styles.container}>
 
-            <Text style={styles.logo}>
+            <Image
+                source={{
+                    uri: 'https://upload.wikimedia.org/wikipedia/commons/8/83/ACDC_Let_There_Be_Rock.jpg'
+                }}
+                style={styles.imagem}
+            />
+
+            <Text style={styles.titulo}>
                 AC/DC
             </Text>
 
-            <Text style={styles.titulo}>
-                Bem-vindo ao site do AC/DC
+            <Text style={styles.subtitulo}>
+                Bem-vindo ao site da banda
+            </Text>
+
+            <Text style={styles.label}>
+                Digite o e-mail
             </Text>
 
             <TextInput
                 style={styles.input}
-                placeholder="Digite seu usuário"
-                placeholderTextColor="#999"
-                value={usuario}
-                onChangeText={setUsuario}
+                placeholder="Digite seu e-mail"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
             />
+
+            <Text style={styles.label}>
+                Senha
+            </Text>
 
             <TextInput
                 style={styles.input}
                 placeholder="Digite sua senha"
-                placeholderTextColor="#999"
-                secureTextEntry={true}
                 value={senha}
                 onChangeText={setSenha}
+                secureTextEntry={true}
             />
 
-            <TouchableOpacity
-                style={styles.botao}
-                onPress={entrar}
-            >
-                <Text style={styles.textoBotao}>
-                    ENTRAR
-                </Text>
-            </TouchableOpacity>
+            <View style={styles.botao}>
+
+                <Button
+                    title="Entrar"
+                    onPress={entrar}
+                    color="#d00000"
+                />
+
+            </View>
 
         </View>
+
     );
 }
 
@@ -77,19 +99,31 @@ const styles = StyleSheet.create({
         padding: 25,
     },
 
-    logo: {
-        fontSize: 55,
-        fontWeight: 'bold',
-        color: '#ffffff',
-        marginBottom: 15,
+    imagem: {
+        width: 200,
+        height: 200,
+        borderRadius: 100,
+        marginBottom: 20,
     },
 
     titulo: {
-        fontSize: 20,
+        fontSize: 40,
         fontWeight: 'bold',
         color: '#ffffff',
-        textAlign: 'center',
+        marginBottom: 5,
+    },
+
+    subtitulo: {
+        fontSize: 16,
+        color: '#cccccc',
         marginBottom: 30,
+    },
+
+    label: {
+        width: '100%',
+        color: '#ffffff',
+        fontSize: 16,
+        marginBottom: 5,
     },
 
     input: {
@@ -104,17 +138,8 @@ const styles = StyleSheet.create({
 
     botao: {
         width: '100%',
-        backgroundColor: '#d00000',
-        padding: 15,
-        borderRadius: 8,
-        alignItems: 'center',
         marginTop: 10,
     },
 
-    textoBotao: {
-        color: '#ffffff',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-
 });
+
