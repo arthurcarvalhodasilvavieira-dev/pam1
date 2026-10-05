@@ -13,12 +13,22 @@ export default function Home({ navigation }) {
 
             <View style={styles.conteudo}>
 
-                <Text style={styles.titulo}>
-                    AC/DC
-                </Text>
+                <View style={styles.cabecalho}>
 
-                <Text style={styles.subtitulo}>
-                    Uma das maiores bandas de rock da história
+                    <Text style={styles.titulo}>
+                        AC/DC
+                    </Text>
+
+                    <Text style={styles.subtitulo}>
+                        ROCK 'N' ROLL
+                    </Text>
+
+                </View>
+
+                <View style={styles.linha}></View>
+
+                <Text style={styles.chamada}>
+                    UMA DAS MAIORES BANDAS DE ROCK DA HISTÓRIA
                 </Text>
 
                 <Text style={styles.texto}>
@@ -46,7 +56,7 @@ export default function Home({ navigation }) {
                 <View style={styles.caixa}>
 
                     <Text style={styles.caixaTitulo}>
-                        Você sabia?
+                        VOCÊ SABIA?
                     </Text>
 
                     <Text style={styles.caixaTexto}>
@@ -57,6 +67,8 @@ export default function Home({ navigation }) {
 
                 </View>
 
+                {/* BOTÃO PARA AS MÚSICAS */}
+
                 <TouchableOpacity
                     style={styles.botao}
                     onPress={() => navigation.navigate('Musicas')}
@@ -65,6 +77,19 @@ export default function Home({ navigation }) {
                         VER MÚSICAS
                     </Text>
                 </TouchableOpacity>
+
+                {/* BOTÃO PARA A PERSONALIDADE */}
+
+                <TouchableOpacity
+                    style={styles.botaoPersonalidade}
+                    onPress={() => navigation.navigate('Personalidade')}
+                >
+                    <Text style={styles.textoBotao}>
+                        DESCOBRIR MINHA PERSONALIDADE
+                    </Text>
+                </TouchableOpacity>
+
+                {/* BOTÃO PARA VOLTAR AO LOGIN */}
 
                 <TouchableOpacity
                     style={styles.botaoSecundario}
@@ -85,42 +110,65 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#151515',
+        backgroundColor: '#080808',
     },
 
     conteudo: {
         padding: 25,
     },
 
+    cabecalho: {
+        alignItems: 'center',
+        paddingVertical: 15,
+    },
+
     titulo: {
-        fontSize: 50,
+        fontSize: 55,
         fontWeight: 'bold',
         color: '#ffffff',
-        textAlign: 'center',
-        marginBottom: 5,
+        letterSpacing: 5,
     },
 
     subtitulo: {
-        fontSize: 18,
+        fontSize: 17,
         color: '#d00000',
         fontWeight: 'bold',
+        letterSpacing: 6,
+        marginTop: 3,
+    },
+
+    linha: {
+        height: 4,
+        backgroundColor: '#d00000',
+        marginVertical: 20,
+    },
+
+    chamada: {
+        fontSize: 17,
+        color: '#ffffff',
+        fontWeight: 'bold',
         textAlign: 'center',
-        marginBottom: 30,
+        letterSpacing: 1,
+        marginBottom: 25,
     },
 
     texto: {
-        color: '#ffffff',
+        color: '#dddddd',
         fontSize: 17,
-        lineHeight: 27,
+        lineHeight: 28,
         marginBottom: 20,
         textAlign: 'justify',
     },
 
     caixa: {
-        backgroundColor: '#252525',
+        backgroundColor: '#151515',
         padding: 20,
-        borderRadius: 10,
+        borderRadius: 5,
         marginVertical: 10,
+        borderLeftWidth: 6,
+        borderLeftColor: '#d00000',
+        borderWidth: 1,
+        borderColor: '#292929',
     },
 
     caixaTitulo: {
@@ -128,6 +176,7 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 10,
+        letterSpacing: 2,
     },
 
     caixaTexto: {
@@ -138,25 +187,40 @@ const styles = StyleSheet.create({
 
     botao: {
         backgroundColor: '#d00000',
-        padding: 16,
-        borderRadius: 8,
+        padding: 17,
+        borderRadius: 5,
         alignItems: 'center',
         marginTop: 25,
     },
 
+    botaoPersonalidade: {
+        backgroundColor: '#1c1c1c',
+        padding: 17,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 12,
+        borderWidth: 2,
+        borderColor: '#d00000',
+    },
+
     botaoSecundario: {
-        backgroundColor: '#333333',
-        padding: 16,
-        borderRadius: 8,
+        backgroundColor: '#222222',
+        padding: 17,
+        borderRadius: 5,
         alignItems: 'center',
         marginTop: 12,
         marginBottom: 20,
+        borderWidth: 1,
+        borderColor: '#555555',
     },
 
     textoBotao: {
         color: '#ffffff',
         fontSize: 16,
         fontWeight: 'bold',
+        letterSpacing: 1,
+        textAlign: 'center',
     },
 
 });
+

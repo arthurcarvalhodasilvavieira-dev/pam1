@@ -1,11 +1,12 @@
 import { useState } from 'react';
 
 import {
+    ScrollView,
     View,
     Text,
     TextInput,
-    Button,
     Image,
+    TouchableOpacity,
     StyleSheet,
     Alert
 } from 'react-native';
@@ -32,7 +33,12 @@ export default function Login({ navigation }) {
 
     return (
 
-        <View style={styles.container}>
+        <ScrollView
+            style={styles.container}
+            contentContainerStyle={styles.conteudo}
+        >
+
+            <View style={styles.linhaVermelha}></View>
 
             <Image
                 source={{
@@ -46,45 +52,57 @@ export default function Login({ navigation }) {
             </Text>
 
             <Text style={styles.subtitulo}>
-                Bem-vindo ao site da banda
+                ROCK 'N' ROLL
             </Text>
 
-            <Text style={styles.label}>
-                Digite o e-mail
+            <Text style={styles.frase}>
+                BEM-VINDO AO MUNDO DO AC/DC
             </Text>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Digite seu e-mail"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-            />
+            <View style={styles.formulario}>
 
-            <Text style={styles.label}>
-                Senha
-            </Text>
+                <Text style={styles.label}>
+                    E-MAIL
+                </Text>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Digite sua senha"
-                value={senha}
-                onChangeText={setSenha}
-                secureTextEntry={true}
-            />
-
-            <View style={styles.botao}>
-
-                <Button
-                    title="Entrar"
-                    onPress={entrar}
-                    color="#d00000"
+                <TextInput
+                    style={styles.input}
+                    placeholder="Digite seu e-mail"
+                    placeholderTextColor="#777777"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
                 />
+
+                <Text style={styles.label}>
+                    SENHA
+                </Text>
+
+                <TextInput
+                    style={styles.input}
+                    placeholder="Digite sua senha"
+                    placeholderTextColor="#777777"
+                    value={senha}
+                    onChangeText={setSenha}
+                    secureTextEntry={true}
+                />
+
+               <TouchableOpacity
+                    style={styles.botao}
+                    onPress={entrar}
+               >
+
+                    <Text style={styles.textoBotao}>
+                        ENTRAR
+                    </Text>
+               </TouchableOpacity>
 
             </View>
 
-        </View>
+            <View style={styles.linhaInferior}></View>
+
+        </ScrollView>
 
     );
 }
@@ -93,52 +111,113 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#151515',
+        backgroundColor: '#080808',
+    },
+
+    conteudo: {
+        minHeight: '100%',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 25,
     },
 
+    linhaVermelha: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 7,
+        backgroundColor: '#d00000',
+    },
+
     imagem: {
-        width: 200,
-        height: 200,
-        borderRadius: 100,
-        marginBottom: 20,
+        width: 190,
+        height: 190,
+        borderRadius: 95,
+        marginBottom: 15,
+        borderWidth: 5,
+        borderColor: '#d00000',
     },
 
     titulo: {
-        fontSize: 40,
+        fontSize: 48,
         fontWeight: 'bold',
         color: '#ffffff',
-        marginBottom: 5,
+        letterSpacing: 4,
+        marginBottom: 2,
     },
 
     subtitulo: {
-        fontSize: 16,
-        color: '#cccccc',
-        marginBottom: 30,
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#d00000',
+        letterSpacing: 5,
+        marginBottom: 10,
+    },
+
+    frase: {
+        color: '#aaaaaa',
+        fontSize: 13,
+        fontWeight: 'bold',
+        letterSpacing: 2,
+        marginBottom: 25,
+        textAlign: 'center',
+    },
+
+    formulario: {
+        width: '100%',
+        backgroundColor: '#151515',
+        padding: 20,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#333333',
     },
 
     label: {
         width: '100%',
         color: '#ffffff',
-        fontSize: 16,
-        marginBottom: 5,
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginBottom: 6,
+        letterSpacing: 1,
     },
 
     input: {
         width: '100%',
         height: 50,
-        backgroundColor: '#ffffff',
-        borderRadius: 8,
+        backgroundColor: '#222222',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#444444',
         paddingHorizontal: 15,
         marginBottom: 15,
         fontSize: 16,
+        color: '#ffffff',
     },
 
     botao: {
-        width: '100%',
+        backgroundColor: '#d00000',
+        borderRadius: 5,
+        marginTop: 5,
+        overflow: 'hidden',
+        width: 1250,
+        height: 50,
+    },
+
+    textoBotao: {
+        color: '#ffffff',
+        fontSize: 16,
+        fontWeight: 'bold',
+        letterSpacing: 2,
+        textAlign: 'center',
         marginTop: 10,
+    },
+
+    linhaInferior: {
+        height: 7,
+        backgroundColor: '#d00000',
+        width: '100%',
+        marginTop: 30,
     },
 
 });

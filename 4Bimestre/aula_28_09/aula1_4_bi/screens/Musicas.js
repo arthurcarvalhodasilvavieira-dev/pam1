@@ -64,8 +64,14 @@ export default function Musicas({ navigation }) {
         <View style={styles.container}>
 
             <Text style={styles.titulo}>
-                Músicas do AC/DC
+                AC/DC
             </Text>
+
+            <Text style={styles.subtitulo}>
+                MÚSICAS
+            </Text>
+
+            <View style={styles.linha}></View>
 
             <FlatList
                 data={musicas}
@@ -77,14 +83,22 @@ export default function Musicas({ navigation }) {
                         onPress={() => selecionarMusica(item)}
                     >
 
-                        <View>
+                        <View style={styles.numero}>
+                            <Text style={styles.numeroTexto}>
+                                {item.id}
+                            </Text>
+                        </View>
+
+                        <View style={styles.informacoes}>
+
                             <Text style={styles.nome}>
                                 {item.nome}
                             </Text>
 
                             <Text style={styles.album}>
-                                Álbum: {item.album}
+                                {item.album}
                             </Text>
+
                         </View>
 
                         <Text style={styles.seta}>
@@ -113,49 +127,89 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#151515',
+        backgroundColor: '#080808',
         padding: 20,
     },
 
     titulo: {
         color: '#ffffff',
-        fontSize: 28,
+        fontSize: 42,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginBottom: 20,
+        letterSpacing: 4,
+        marginTop: 10,
+    },
+
+    subtitulo: {
+        color: '#d00000',
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        letterSpacing: 5,
+        marginTop: 2,
+    },
+
+    linha: {
+        height: 4,
+        backgroundColor: '#d00000',
+        marginVertical: 20,
     },
 
     musica: {
-        backgroundColor: '#252525',
-        padding: 18,
-        borderRadius: 10,
+        backgroundColor: '#151515',
+        padding: 16,
+        borderRadius: 5,
         marginBottom: 12,
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#292929',
+        borderLeftWidth: 5,
+        borderLeftColor: '#d00000',
+    },
+
+    numero: {
+        width: 35,
+        height: 35,
+        borderRadius: 20,
+        backgroundColor: '#d00000',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
+    },
+
+    numeroTexto: {
+        color: '#ffffff',
+        fontWeight: 'bold',
+        fontSize: 14,
+    },
+
+    informacoes: {
+        flex: 1,
     },
 
     nome: {
         color: '#ffffff',
-        fontSize: 18,
+        fontSize: 17,
         fontWeight: 'bold',
     },
 
     album: {
-        color: '#aaaaaa',
-        fontSize: 14,
+        color: '#999999',
+        fontSize: 13,
         marginTop: 5,
     },
 
     seta: {
         color: '#d00000',
-        fontSize: 22,
+        fontSize: 20,
+        marginLeft: 10,
     },
 
     botao: {
         backgroundColor: '#d00000',
-        padding: 15,
-        borderRadius: 8,
+        padding: 16,
+        borderRadius: 5,
         alignItems: 'center',
         marginTop: 10,
         marginBottom: 5,
@@ -165,6 +219,8 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         fontSize: 16,
         fontWeight: 'bold',
+        letterSpacing: 1,
     },
 
 });
+

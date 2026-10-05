@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../screens/Login';
 import Home from '../screens/Home';
 import Musicas from '../screens/Musicas';
+import Personalidade from '../screens/Personalidade';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +28,11 @@ export default function StackNavigator() {
                     component={Musicas}
                 />
 
+                <Stack.Screen
+                     name="Personalidade"
+                    component={Personalidade}
+                />
+        
             </Stack.Navigator>
         </NavigationContainer>
     );
