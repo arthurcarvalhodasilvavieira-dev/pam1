@@ -1,4 +1,3 @@
-
 import {
   Text,
   View,
@@ -10,16 +9,22 @@ import {
   Platform,
   StyleSheet,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 
 import { useState } from 'react';
 
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase/firebase';
+
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [carregando, setCarregando] = useState(false);
 
-  function fazerLogin() {
-    if (!email.trim() || !senha.trim()) {
+  async function fazerLogin() {
+    // Verifica se os campos foram preenchidos
+    if (!email.trim() || !senha) {
       Alert.alert(
         'Atenção',
         'Digite o e-mail e a senha.'
@@ -27,19 +32,88 @@ export default function Login({ navigation }) {
       return;
     }
 
-    navigation.navigate('Home');
+    // Evita múltiplas tentativas simultâneas
+    if (carregando) {
+      return;
+    }
+
+    try {
+      setCarregando(true);
+
+      // Autentica o usuário no Firebase
+      await signInWithEmailAndPassword(
+        auth,
+        email.trim(),
+        senha
+      );
+
+      // Acessa a tela inicial após o login
+      navigation.navigate('Home');
+    } catch (error) {
+      console.log('Erro no login:', error.code);
+
+      if (
+        error.code === 'auth/invalid-credential' ||
+        error.code === 'auth/wrong-password' ||
+        error.code === 'auth/user-not-found'
+      ) {
+        Alert.alert(
+          'Erro',
+          'E-mail ou senha incorretos.'
+        );
+      } else if (
+        error.code === 'auth/invalid-email'
+      ) {
+        Alert.alert(
+          'Erro',
+          'Digite um e-mail válido.'
+        );
+      } else if (
+        error.code === 'auth/user-disabled'
+      ) {
+        Alert.alert(
+          'Erro',
+          'Esta conta foi desativada.'
+        );
+      } else if (
+        error.code === 'auth/too-many-requests'
+      ) {
+        Alert.alert(
+          'Atenção',
+          'Muitas tentativas de login. Tente novamente mais tarde.'
+        );
+      } else if (
+        error.code === 'auth/network-request-failed'
+      ) {
+        Alert.alert(
+          'Erro de conexão',
+          'Verifique sua conexão com a internet e tente novamente.'
+        );
+      } else {
+        Alert.alert(
+          'Erro',
+          'Não foi possível entrar. Tente novamente.'
+        );
+      }
+    } finally {
+      setCarregando(false);
+    }
   }
 
   return (
     <KeyboardAvoidingView
       style={styles.teclado}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      behavior={
+        Platform.OS === 'ios' ? 'padding' : undefined
+      }
     >
       <ScrollView
         contentContainerStyle={styles.scroll}
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.container}>
+
+          {/* CABEÇALHO */}
 
           <Text style={styles.simbolo}>♛</Text>
 
@@ -51,12 +125,16 @@ export default function Login({ navigation }) {
 
           <View style={styles.linhaDourada} />
 
+          {/* IMAGEM */}
+
           <Image
             source={{
               uri: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f',
             }}
             style={styles.imagem}
           />
+
+          {/* APRESENTAÇÃO */}
 
           <Text style={styles.boasVindas}>
             WELCOME TO THE SHOW
@@ -66,7 +144,11 @@ export default function Login({ navigation }) {
             Entre e prepare-se para o espetáculo.
           </Text>
 
-          <Text style={styles.texto}>E-MAIL</Text>
+          {/* E-MAIL */}
+
+          <Text style={styles.texto}>
+            E-MAIL
+          </Text>
 
           <TextInput
             placeholder="fulano@hotmail.com"
@@ -77,9 +159,16 @@ export default function Login({ navigation }) {
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
+            autoComplete="email"
+            editable={!carregando}
+            returnKeyType="next"
           />
 
-          <Text style={styles.texto}>SENHA</Text>
+          {/* SENHA */}
+
+          <Text style={styles.texto}>
+            SENHA
+          </Text>
 
           <TextInput
             placeholder="Digite sua senha"
@@ -89,22 +178,51 @@ export default function Login({ navigation }) {
             value={senha}
             onChangeText={setSenha}
             autoCapitalize="none"
+            autoCorrect={false}
+            autoComplete="current-password"
+            editable={!carregando}
+            returnKeyType="done"
+            onSubmitEditing={fazerLogin}
           />
 
+          {/* BOTÃO ENTRAR */}
+
           <TouchableOpacity
-            style={styles.botao}
+            style={[
+              styles.botao,
+              carregando && styles.botaoDesabilitado,
+            ]}
             onPress={fazerLogin}
             activeOpacity={0.8}
+            disabled={carregando}
           >
-            <Text style={styles.textoBotao}>
-              ENTRAR
-            </Text>
+            {carregando ? (
+              <View style={styles.conteudoBotao}>
+                <ActivityIndicator
+                  color="#080808"
+                  size="small"
+                />
+
+                <Text style={styles.textoBotao}>
+                  ENTRANDO...
+                </Text>
+              </View>
+            ) : (
+              <Text style={styles.textoBotao}>
+                ENTRAR
+              </Text>
+            )}
           </TouchableOpacity>
+
+          {/* IR PARA CADASTRO */}
 
           <TouchableOpacity
             style={styles.areaCadastro}
-            onPress={() => navigation.navigate('Cadastro')}
+            onPress={() =>
+              navigation.navigate('Cadastro')
+            }
             activeOpacity={0.7}
+            disabled={carregando}
           >
             <Text style={styles.textoCadastro}>
               Ainda não possui uma conta?
@@ -114,6 +232,8 @@ export default function Login({ navigation }) {
               CADASTRE-SE
             </Text>
           </TouchableOpacity>
+
+          {/* RODAPÉ */}
 
           <View style={styles.rodapeContainer}>
             <View style={styles.linhaRodape} />
@@ -233,7 +353,20 @@ const styles = StyleSheet.create({
     padding: 17,
     borderRadius: 6,
     alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 25,
+    minHeight: 56,
+  },
+
+  botaoDesabilitado: {
+    opacity: 0.7,
+  },
+
+  conteudoBotao: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
   },
 
   textoBotao: {
