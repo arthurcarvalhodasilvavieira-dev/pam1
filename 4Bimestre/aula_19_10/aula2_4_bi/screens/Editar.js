@@ -6,9 +6,7 @@ import { useState } from 'react';
  
 import { signInWithEmailAndPassword } from 'firebase/auth'; 
  
-import { auth } from '../../firebase/firebase'; 
- 
-import estilos from './estilo'; 
+import { auth } from '../firebase/firebase'; 
  
 export default function Login({ navigation }) { 
  

@@ -2,12 +2,12 @@ import {
   Text,
   View,
   TextInput,
-  Image,
   TouchableOpacity,
   Alert,
   KeyboardAvoidingView,
   ScrollView,
-  Platform
+  Platform,
+  StyleSheet,
 } from 'react-native';
 
 import { useState } from 'react';
@@ -15,180 +15,143 @@ import { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 
-import { auth, db } from '../../firebase/firebase';
-
-import estilos from './estilo';
+import { auth, db } from '../firebase/firebase';
 
 export default function Cadastro({ navigation }) {
-
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
 
   async function cadastrar() {
-
     // Verifica se todos os campos foram preenchidos
-    if (!nome || !email || !senha || !confirmarSenha) {
-
+    if (
+      !nome.trim() ||
+      !email.trim() ||
+      !senha ||
+      !confirmarSenha
+    ) {
       Alert.alert(
         'Atenção',
         'Preencha todos os campos.'
       );
-
       return;
     }
 
-    
+    // Verifica se as senhas são iguais
     if (senha !== confirmarSenha) {
-
       Alert.alert(
         'Atenção',
         'As senhas não são iguais.'
       );
-
       return;
     }
 
     try {
+      // Cria o usuário no Firebase Authentication
+      const usuarioCriado =
+        await createUserWithEmailAndPassword(
+          auth,
+          email.trim(),
+          senha
+        );
 
-      
-      const usuarioCriado = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        senha
-      );
-
-      
       const uid = usuarioCriado.user.uid;
 
-     
-      await setDoc(
-        doc(db, 'usuarios', uid),
-        {
-          nome: nome,
-          email: email,
-        }
-      );
+      // Salva os dados do usuário no Firestore
+      await setDoc(doc(db, 'usuarios', uid), {
+        nome: nome.trim(),
+        email: email.trim(),
+      });
 
-      
       Alert.alert(
         'Cadastro concluído!',
         'Sua conta foi criada com sucesso.',
         [
           {
             text: 'Entrar',
-            onPress: () => navigation.navigate('Login')
-          }
+            onPress: () => navigation.navigate('Login'),
+          },
         ]
       );
-
     } catch (error) {
-
       console.log(error);
 
-      
       if (error.code === 'auth/email-already-in-use') {
-
         Alert.alert(
           'Erro',
           'Este e-mail já está cadastrado.'
         );
-
-      }
-
-      
-      else if (error.code === 'auth/invalid-email') {
-
+      } else if (error.code === 'auth/invalid-email') {
         Alert.alert(
           'Erro',
           'Digite um e-mail válido.'
         );
-
-      }
-
-      
-      else if (error.code === 'auth/weak-password') {
-
+      } else if (error.code === 'auth/weak-password') {
         Alert.alert(
           'Erro',
           'A senha precisa ter pelo menos 6 caracteres.'
         );
-
-      }
-
-     
-      else {
-
+      } else {
         Alert.alert(
           'Erro',
           'Não foi possível realizar o cadastro.'
         );
-
       }
     }
   }
 
   return (
-
     <KeyboardAvoidingView
-      style={estilos.teclado}
+      style={styles.teclado}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-
       <ScrollView
-        contentContainerStyle={estilos.scroll}
+        contentContainerStyle={styles.scroll}
         keyboardShouldPersistTaps="handled"
       >
+        <View style={styles.container}>
+          {/* CABEÇALHO */}
 
-        <View style={estilos.container}>
+          <Text style={styles.simbolo}>♛</Text>
 
-         
+          <Text style={styles.titulo}>QUEEN</Text>
 
-          <Text style={estilos.simbolo}>
-            ♛
-          </Text>
-
-          <Text style={estilos.titulo}>
-            QUEEN
-          </Text>
-
-          <Text style={estilos.subtitulo}>
+          <Text style={styles.subtitulo}>
             JOIN THE LEGACY
           </Text>
 
-          <View style={estilos.linhaDourada} />
+          <View style={styles.linhaDourada} />
 
-          <Image
-            source={{
-              uri: 'https://reactnative.dev/docs/assets/p_cat1.png',
-            }}
-            style={estilos.imagem}
-          />
+          {/* APRESENTAÇÃO */}
 
-
-          <Text style={estilos.boasVindas}>
+          <Text style={styles.boasVindas}>
             CRIE SUA CONTA
           </Text>
 
-          <Text style={estilos.descricao}>
+          <Text style={styles.descricao}>
             Faça parte deste espetáculo do rock!
           </Text>
 
-          <Text style={estilos.texto}>
+          {/* NOME */}
+
+          <Text style={styles.texto}>
             NOME COMPLETO
           </Text>
 
           <TextInput
             placeholder="Digite seu nome"
             placeholderTextColor="#A7A7A7"
-            style={estilos.input}
+            style={styles.input}
             value={nome}
             onChangeText={setNome}
             autoCapitalize="words"
+            autoCorrect={false}
           />
 
-          <Text style={estilos.texto}>
+          {/* E-MAIL */}
+
+          <Text style={styles.texto}>
             E-MAIL
           </Text>
 
@@ -198,87 +161,234 @@ export default function Cadastro({ navigation }) {
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
-            style={estilos.input}
+            style={styles.input}
             value={email}
             onChangeText={setEmail}
           />
 
-          <Text style={estilos.texto}>
+          {/* SENHA */}
+
+          <Text style={styles.texto}>
             SENHA
           </Text>
 
           <TextInput
             placeholder="Digite sua senha"
             placeholderTextColor="#A7A7A7"
-            secureTextEntry={true}
+            secureTextEntry
             autoCapitalize="none"
-            style={estilos.input}
+            style={styles.input}
             value={senha}
             onChangeText={setSenha}
           />
 
-          <Text style={estilos.texto}>
+          {/* CONFIRMAR SENHA */}
+
+          <Text style={styles.texto}>
             CONFIRMAR SENHA
           </Text>
 
           <TextInput
             placeholder="Digite a senha novamente"
             placeholderTextColor="#A7A7A7"
-            secureTextEntry={true}
+            secureTextEntry
             autoCapitalize="none"
-            style={estilos.input}
+            style={styles.input}
             value={confirmarSenha}
             onChangeText={setConfirmarSenha}
           />
 
+          {/* BOTÃO CADASTRAR */}
+
           <TouchableOpacity
-            style={estilos.botao}
+            style={styles.botao}
             onPress={cadastrar}
             activeOpacity={0.8}
           >
-
-            <Text style={estilos.textoBotao}>
+            <Text style={styles.textoBotao}>
               CADASTRAR
             </Text>
-
           </TouchableOpacity>
 
+          {/* VOLTAR AO LOGIN */}
+
           <TouchableOpacity
-            style={estilos.areaLogin}
+            style={styles.areaLogin}
             onPress={() => navigation.navigate('Login')}
             activeOpacity={0.7}
           >
-
-            <Text style={estilos.textoLogin}>
+            <Text style={styles.textoLogin}>
               Já possui uma conta?
             </Text>
 
-            <Text style={estilos.linkLogin}>
+            <Text style={styles.linkLogin}>
               ENTRAR
             </Text>
-
           </TouchableOpacity>
 
-          <View style={estilos.rodapeContainer}>
+          {/* RODAPÉ */}
 
-            <View style={estilos.linhaRodape} />
+          <View style={styles.rodapeContainer}>
+            <View style={styles.linhaRodape} />
 
-            <Text style={estilos.rodape}>
+            <Text style={styles.rodape}>
               MUSIC • PASSION • LEGACY
             </Text>
 
-            <Text style={estilos.rodapeSecundario}>
+            <Text style={styles.rodapeSecundario}>
               A NIGHT AT THE OPERA
             </Text>
-
           </View>
-
         </View>
-
       </ScrollView>
-
     </KeyboardAvoidingView>
-
   );
 }
 
+const styles = StyleSheet.create({
+  teclado: {
+    flex: 1,
+    backgroundColor: '#080808',
+  },
+
+  scroll: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+
+  container: {
+    flex: 1,
+    paddingHorizontal: 25,
+    paddingVertical: 30,
+    alignItems: 'center',
+  },
+
+  simbolo: {
+    color: '#C9A227',
+    fontSize: 50,
+    marginBottom: 5,
+  },
+
+  titulo: {
+    fontSize: 45,
+    fontWeight: '900',
+    color: '#FFFFFF',
+    letterSpacing: 7,
+  },
+
+  subtitulo: {
+    fontSize: 14,
+    color: '#C9A227',
+    fontWeight: 'bold',
+    letterSpacing: 3,
+    marginTop: 8,
+    textAlign: 'center',
+  },
+
+  linhaDourada: {
+    width: '100%',
+    height: 3,
+    backgroundColor: '#C9A227',
+    marginVertical: 22,
+  },
+
+  boasVindas: {
+    color: '#FFFFFF',
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    letterSpacing: 1,
+  },
+
+  descricao: {
+    color: '#BBBBBB',
+    fontSize: 15,
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 22,
+  },
+
+  texto: {
+    color: '#C9A227',
+    fontSize: 14,
+    fontWeight: 'bold',
+    alignSelf: 'flex-start',
+    marginBottom: 8,
+    marginTop: 10,
+    letterSpacing: 1,
+  },
+
+  input: {
+    width: '100%',
+    height: 52,
+    backgroundColor: '#151515',
+    borderWidth: 1,
+    borderColor: '#444444',
+    borderRadius: 6,
+    paddingHorizontal: 15,
+    color: '#FFFFFF',
+    fontSize: 16,
+  },
+
+  botao: {
+    width: '100%',
+    backgroundColor: '#C9A227',
+    padding: 17,
+    borderRadius: 6,
+    alignItems: 'center',
+    marginTop: 28,
+  },
+
+  textoBotao: {
+    color: '#080808',
+    fontSize: 16,
+    fontWeight: '900',
+    letterSpacing: 2,
+  },
+
+  areaLogin: {
+    alignItems: 'center',
+    marginTop: 22,
+  },
+
+  textoLogin: {
+    color: '#BBBBBB',
+    fontSize: 14,
+  },
+
+  linkLogin: {
+    color: '#C9A227',
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginTop: 7,
+    letterSpacing: 1,
+  },
+
+  rodapeContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 32,
+  },
+
+  linhaRodape: {
+    width: '60%',
+    height: 1,
+    backgroundColor: '#444444',
+    marginBottom: 18,
+  },
+
+  rodape: {
+    color: '#C9A227',
+    fontSize: 12,
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    textAlign: 'center',
+  },
+
+  rodapeSecundario: {
+    color: '#777777',
+    fontSize: 11,
+    marginTop: 8,
+    letterSpacing: 2,
+  },
+});
