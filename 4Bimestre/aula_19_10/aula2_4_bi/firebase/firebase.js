@@ -3,12 +3,12 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCBwxYlYeLqoV4ZEKKgM0AbwYR-I90M0m4",
-  authDomain: "queen-90e60.firebaseapp.com",
-  projectId: "queen-90e60",
-  storageBucket: "queen-90e60.firebasestorage.app",
-  messagingSenderId: "748958651455",
-  appId: "1:748958651455:web:4ce609c5174cad7dac948a"
+  apiKey: "AIzaSyBxL7OjuphcyK6ZGzCA48dOJuBDoGGm6pg",
+  authDomain: "queen-fad85.firebaseapp.com",
+  projectId: "queen-fad85",
+  storageBucket: "queen-fad85.firebasestorage.app",
+  messagingSenderId: "107987106284",
+  appId: "1:107987106284:web:ebddbb9ca12bd479e128c9"
 };
 
 const app = initializeApp(firebaseConfig);
