@@ -1,3 +1,4 @@
+
 import {
   Text,
   View,
@@ -18,29 +19,39 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 
 export default function Login({ navigation }) {
+
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [carregando, setCarregando] = useState(false);
 
+
   async function fazerLogin() {
+
     // Verifica se os campos foram preenchidos
+
     if (!email.trim() || !senha) {
       Alert.alert(
         'Atenção',
         'Digite o e-mail e a senha.'
       );
+
       return;
     }
 
+
     // Evita múltiplas tentativas simultâneas
+
     if (carregando) {
       return;
     }
 
+
     try {
+
       setCarregando(true);
 
       // Autentica o usuário no Firebase
+
       await signInWithEmailAndPassword(
         auth,
         email.trim(),
@@ -48,76 +59,159 @@ export default function Login({ navigation }) {
       );
 
       // Acessa a tela inicial após o login
+
       navigation.navigate('Home');
+
+
     } catch (error) {
+
       console.log('Erro no login:', error.code);
 
-      if (
-        error.code === 'auth/invalid-credential' ||
-        error.code === 'auth/wrong-password' ||
-        error.code === 'auth/user-not-found'
-      ) {
+
+      // Verifica se o e-mail não possui cadastro
+
+      if (error.code === 'auth/user-not-found') {
+
         Alert.alert(
-          'Erro',
-          'E-mail ou senha incorretos.'
+          'Conta não encontrada',
+
+          'Este e-mail ainda não possui cadastro. Por favor, cadastre-se antes de entrar.',
+
+          [
+            {
+              text: 'Cancelar',
+              style: 'cancel',
+            },
+
+            {
+              text: 'Cadastrar',
+              onPress: () => navigation.navigate('Cadastro'),
+            },
+          ]
         );
-      } else if (
+
+
+      }
+
+      // Verifica se o e-mail ou a senha estão incorretos
+
+      else if (
+        error.code === 'auth/invalid-credential' ||
+        error.code === 'auth/wrong-password'
+      ) {
+
+        Alert.alert(
+          'Erro no login',
+          'E-mail ou senha incorretos. Verifique seus dados e tente novamente.'
+        );
+
+      }
+
+
+      // Verifica se o formato do e-mail é inválido
+
+      else if (
         error.code === 'auth/invalid-email'
       ) {
+
         Alert.alert(
-          'Erro',
-          'Digite um e-mail válido.'
+          'E-mail inválido',
+          'Digite um endereço de e-mail válido.'
         );
-      } else if (
+
+      }
+
+
+      // Verifica se a conta foi desativada
+
+      else if (
         error.code === 'auth/user-disabled'
       ) {
+
         Alert.alert(
-          'Erro',
+          'Conta desativada',
           'Esta conta foi desativada.'
         );
-      } else if (
+
+      }
+
+
+      // Verifica excesso de tentativas
+
+      else if (
         error.code === 'auth/too-many-requests'
       ) {
+
         Alert.alert(
           'Atenção',
           'Muitas tentativas de login. Tente novamente mais tarde.'
         );
-      } else if (
+
+      }
+
+
+      // Verifica problemas de conexão
+
+      else if (
         error.code === 'auth/network-request-failed'
       ) {
+
         Alert.alert(
           'Erro de conexão',
           'Verifique sua conexão com a internet e tente novamente.'
         );
-      } else {
+
+      }
+
+
+      // Outros erros
+
+      else {
+
         Alert.alert(
           'Erro',
           'Não foi possível entrar. Tente novamente.'
         );
+
       }
+
     } finally {
+
+      // Finaliza o carregamento
+
       setCarregando(false);
+
     }
+
   }
 
+
   return (
+
     <KeyboardAvoidingView
       style={styles.teclado}
       behavior={
         Platform.OS === 'ios' ? 'padding' : undefined
       }
     >
+
       <ScrollView
         contentContainerStyle={styles.scroll}
         keyboardShouldPersistTaps="handled"
       >
+
         <View style={styles.container}>
+
 
           {/* CABEÇALHO */}
 
-          <Text style={styles.simbolo}>♛</Text>
+          <Text style={styles.simbolo}>
+            ♛
+          </Text>
 
-          <Text style={styles.titulo}>QUEEN</Text>
+          <Text style={styles.titulo}>
+            QUEEN
+          </Text>
 
           <Text style={styles.subtitulo}>
             LONG LIVE ROCK 'N' ROLL
@@ -125,14 +219,16 @@ export default function Login({ navigation }) {
 
           <View style={styles.linhaDourada} />
 
+
           {/* IMAGEM */}
 
           <Image
             source={{
-              uri: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f',
+              uri: 'https://thumbs.dreamstime.com/b/queen-british-rock-band-vector-logo-queen-british-rock-band-vector-logo-t-shirt-poster-design-concept-isolated-black-378468980.jpg',
             }}
             style={styles.imagem}
           />
+
 
           {/* APRESENTAÇÃO */}
 
@@ -143,6 +239,7 @@ export default function Login({ navigation }) {
           <Text style={styles.descricao}>
             Entre e prepare-se para o espetáculo.
           </Text>
+
 
           {/* E-MAIL */}
 
@@ -163,6 +260,7 @@ export default function Login({ navigation }) {
             editable={!carregando}
             returnKeyType="next"
           />
+
 
           {/* SENHA */}
 
@@ -185,6 +283,7 @@ export default function Login({ navigation }) {
             onSubmitEditing={fazerLogin}
           />
 
+
           {/* BOTÃO ENTRAR */}
 
           <TouchableOpacity
@@ -196,8 +295,11 @@ export default function Login({ navigation }) {
             activeOpacity={0.8}
             disabled={carregando}
           >
+
             {carregando ? (
+
               <View style={styles.conteudoBotao}>
+
                 <ActivityIndicator
                   color="#080808"
                   size="small"
@@ -206,13 +308,19 @@ export default function Login({ navigation }) {
                 <Text style={styles.textoBotao}>
                   ENTRANDO...
                 </Text>
+
               </View>
+
             ) : (
+
               <Text style={styles.textoBotao}>
                 ENTRAR
               </Text>
+
             )}
+
           </TouchableOpacity>
+
 
           {/* IR PARA CADASTRO */}
 
@@ -224,6 +332,7 @@ export default function Login({ navigation }) {
             activeOpacity={0.7}
             disabled={carregando}
           >
+
             <Text style={styles.textoCadastro}>
               Ainda não possui uma conta?
             </Text>
@@ -231,11 +340,14 @@ export default function Login({ navigation }) {
             <Text style={styles.linkCadastro}>
               CADASTRE-SE
             </Text>
+
           </TouchableOpacity>
+
 
           {/* RODAPÉ */}
 
           <View style={styles.rodapeContainer}>
+
             <View style={styles.linhaRodape} />
 
             <Text style={styles.rodape}>
@@ -245,15 +357,22 @@ export default function Login({ navigation }) {
             <Text style={styles.rodapeSecundario}>
               A NIGHT AT THE OPERA
             </Text>
+
           </View>
 
         </View>
+
       </ScrollView>
+
     </KeyboardAvoidingView>
+
   );
+
 }
 
+
 const styles = StyleSheet.create({
+
   teclado: {
     flex: 1,
     backgroundColor: '#080808',
@@ -303,7 +422,7 @@ const styles = StyleSheet.create({
 
   imagem: {
     width: 190,
-    height: 130,
+    height: 200,
     borderRadius: 10,
     marginBottom: 22,
     backgroundColor: '#222222',
@@ -421,4 +540,5 @@ const styles = StyleSheet.create({
     marginTop: 8,
     letterSpacing: 2,
   },
+
 });

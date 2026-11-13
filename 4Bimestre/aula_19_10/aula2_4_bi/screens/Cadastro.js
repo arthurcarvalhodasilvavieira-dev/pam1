@@ -24,6 +24,7 @@ export default function Cadastro({ navigation }) {
   const [confirmarSenha, setConfirmarSenha] = useState('');
 
   async function cadastrar() {
+
     // Verifica se todos os campos foram preenchidos
     if (
       !nome.trim() ||
@@ -48,6 +49,7 @@ export default function Cadastro({ navigation }) {
     }
 
     try {
+
       // Cria o usuário no Firebase Authentication
       const usuarioCriado =
         await createUserWithEmailAndPassword(
@@ -58,46 +60,40 @@ export default function Cadastro({ navigation }) {
 
       const uid = usuarioCriado.user.uid;
 
+      console.log('Usuário criado no Authentication!');
+
       // Salva os dados do usuário no Firestore
       await setDoc(doc(db, 'usuarios', uid), {
         nome: nome.trim(),
         email: email.trim(),
       });
 
+      console.log('Dados salvos no Firestore!');
+      console.log('Cadastro realizado com sucesso!');
+
+      // Exibe mensagem de sucesso
       Alert.alert(
-        'Cadastro concluído!',
-        'Sua conta foi criada com sucesso.',
+        'Cadastro efetuado',
+        'Sua conta foi criada com sucesso!',
         [
           {
-            text: 'Entrar',
+            text: 'OK',
             onPress: () => navigation.navigate('Login'),
           },
         ]
       );
-    } catch (error) {
-      console.log(error);
 
-      if (error.code === 'auth/email-already-in-use') {
-        Alert.alert(
-          'Erro',
-          'Este e-mail já está cadastrado.'
-        );
-      } else if (error.code === 'auth/invalid-email') {
-        Alert.alert(
-          'Erro',
-          'Digite um e-mail válido.'
-        );
-      } else if (error.code === 'auth/weak-password') {
-        Alert.alert(
-          'Erro',
-          'A senha precisa ter pelo menos 6 caracteres.'
-        );
-      } else {
-        Alert.alert(
-          'Erro',
-          'Não foi possível realizar o cadastro.'
-        );
-      }
+    } catch (error) {
+
+      // Exibe informações do erro no console
+      console.log('ERRO NO CADASTRO:', error.code);
+      console.log('MENSAGEM:', error.message);
+
+      // Exibe o erro na tela
+      Alert.alert(
+        'Erro no cadastro',
+        error.message
+      );
     }
   }
 
@@ -111,6 +107,7 @@ export default function Cadastro({ navigation }) {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.container}>
+
           {/* CABEÇALHO */}
 
           <Text style={styles.simbolo}>♛</Text>
@@ -239,6 +236,7 @@ export default function Cadastro({ navigation }) {
               A NIGHT AT THE OPERA
             </Text>
           </View>
+
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -246,6 +244,7 @@ export default function Cadastro({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+
   teclado: {
     flex: 1,
     backgroundColor: '#080808',
@@ -391,4 +390,5 @@ const styles = StyleSheet.create({
     marginTop: 8,
     letterSpacing: 2,
   },
+
 });

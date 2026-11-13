@@ -5,6 +5,8 @@ import Login from '../screens/Login';
 import Home from '../screens/Home'; 
 import Cadastro from '../screens/Cadastro'; 
 import Editar from '../screens/Editar'; 
+import Musicas from '../screens/Musicas';
+import Personalidade from '../screens/Personalidade'; 
  
 const Stack = createNativeStackNavigator(); 
  
@@ -19,9 +21,6 @@ export default function StackNavigator() {
         <Stack.Screen 
           name="Login" 
           component={Login} 
-          // options={{ 
-          //   headerShown: false, 
-          // }} 
         /> 
  
        <Stack.Screen 
@@ -37,7 +36,17 @@ export default function StackNavigator() {
         <Stack.Screen 
           name="Editar" 
           component={Editar} 
-        />  
+        />
+
+        <Stack.Screen 
+          name="Musicas" 
+          component={Musicas} 
+        />
+
+        <Stack.Screen 
+          name="Personalidade" 
+          component={Personalidade} 
+        />    
  
       </Stack.Navigator> 
     </NavigationContainer> 
