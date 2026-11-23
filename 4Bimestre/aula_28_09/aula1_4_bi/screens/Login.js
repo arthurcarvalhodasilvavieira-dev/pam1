@@ -42,7 +42,7 @@ export default function Login({ navigation }) {
 
             <Image
                 source={{
-                    uri: 'https://upload.wikimedia.org/wikipedia/commons/8/83/ACDC_Let_There_Be_Rock.jpg'
+                    uri: 'https://imgproxy-images.merchbar.com/insecure/rs:fit:1400::1/f:webp/czM6Ly9tZXJjaGJhci1pbWFnZXMvcHJvZHVjdC80NS8zNzYxL3gzYXNhYzUyL1U3MF8zdUFNWDNBU0FDNTIuSlBH'
                 }}
                 style={styles.imagem}
             />
